@@ -13,14 +13,13 @@ const Tasks = ()=> {
     dispatch(destroyTask(task));
   }
 
-
   return (
     <ul>
       {
         tasks.map( task => {
           return (
             <li key={ task.id }>
-              <Link to={`/tasks/${task.id}`} style={{textDecoration: task.isComplete ? 'line-through' : ''}}>{ task.name } </Link> { task.isComplete ? 'complete' : 'incomplete'}
+              <Link to={`/tasks/${task.id}`} style={{textDecoration: task.isComplete ? 'line-through' : ''}}>{ task.name } </Link> ({ task.priority })
 
               <button onClick={ ev => destroy(task)}>x</button>
             </li>

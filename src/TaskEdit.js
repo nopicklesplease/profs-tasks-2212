@@ -8,7 +8,8 @@ const TaskEdit = () => {
     const { tasks } = useSelector(state => state);
     const [name, setName] = useState('');
     const [isComplete, setIsComplete] = useState('');
-    console.log(tasks, id);
+    const [priority, setPriority] = useState(5);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const task = tasks.find(task => task.id === id)
@@ -19,6 +20,7 @@ const TaskEdit = () => {
         if(task){
             setName(task.name);
             setIsComplete(task.isComplete);
+            setPriority(task.priority);
         }
     }, [tasks])
 
@@ -29,12 +31,17 @@ const TaskEdit = () => {
     const update = async(ev) => {
         ev.preventDefault();
         try{
-            await dispatch(updateTask({ name, id, isComplete }));
+            await dispatch(updateTask({ name, id, isComplete, priority }));
             navigate('/');
         }
         catch(err){
             console.log(err);
         }
+    }
+
+    const priorities = [];
+    for(let i = 1; i <= 20; i++){
+        priorities.push(i);
     }
 
     return(
@@ -49,6 +56,17 @@ const TaskEdit = () => {
             <input value={ name } onChange={ ev => setName(ev.target.value)}/>
 
             Complete? <input type='checkbox' checked={ isComplete } onChange={ ev => setIsComplete(ev.target.checked)}/>
+
+            <select value = {priority} onChange={ev => setPriority(ev.target.value)}>
+            {
+                priorities.map( p => {
+                    return(
+                        <option key = { p }>{ p }</option>
+                    )
+                })
+            }
+            
+            </select>
 
             <button>Update</button>
         </form>

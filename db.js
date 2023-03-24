@@ -1,4 +1,4 @@
-const { BOOLEAN } = require('sequelize');
+const { BOOLEAN, INTEGER } = require('sequelize');
 const Sequelize = require('sequelize');
 const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/profs_tasks_db');
 const { UUID, UUIDV4, STRING } = Sequelize;
@@ -20,6 +20,11 @@ const Task = conn.define('task', {
     type: BOOLEAN,
     allowNull: false,
     defaultValue: false
+  },
+  priority: {
+    type: INTEGER,
+    allowNull: false,
+    defaultValue: 5
   }
 });
 
