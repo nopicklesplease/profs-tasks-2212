@@ -25,15 +25,41 @@ app.post('/api/tasks', async(req, res, next)=> {
   }
 });
 
+app.delete('/api/tasks/:id', async(req, res, next) => {
+  try{
+      const task = await Task.findByPk(req.params.id);
+      await task.destroy();
+      res.sendStatus(204);
+    }
+    catch(err){
+      next(err);
+    }
+  })
+
+app.put('/api/tasks/:id', async(req, res, next) => {
+  try{
+    const task = await Task.findByPk(req.params.id);
+    res.send(await task.update(req.body));
+  }
+  catch(err){
+    next(err);
+  }
+})
+
+app.use((err, req, res, next)=> {
+  console.log(err);
+  res.status(500).send({ error: err });
+});
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, async()=> {
   try {
     console.log(`listening on port ${port}`);
     await conn.sync({ force: true });
-    await Promise.all(
-      ['quq', 'take out trash', 'get milk'].map( name => Task.create({ name }))
-    );
+      const [quq, trash, milk] = await Promise.all(['quq', 'take out trash', 'get milk'].map( name => Task.create({ name })))
+
+    await milk.update({ isComplete: true });
   }
   catch(ex){
     console.log(ex);
